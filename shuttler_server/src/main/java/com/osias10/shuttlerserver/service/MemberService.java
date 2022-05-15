@@ -5,6 +5,7 @@ import com.osias10.shuttlerserver.domain.entity.MemberEntity;
 import com.osias10.shuttlerserver.domain.repository.MemberRepository;
 import com.osias10.shuttlerserver.dto.MemberDto;
 import lombok.AllArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -22,16 +23,13 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-
 public class MemberService implements UserDetailsService {
-
-	
-	private MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @Transactional
     public Long joinUser(MemberDto memberDto) {
-        // ��й�ȣ ��ȣȭ
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        // 비밀번호 암호화
+               BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
 
         return memberRepository.save(memberDto.toEntity()).getId();
@@ -52,6 +50,4 @@ public class MemberService implements UserDetailsService {
 
         return new User(userEntity.getEmail(), userEntity.getPassword(), authorities);
     }
-    
-    
 }

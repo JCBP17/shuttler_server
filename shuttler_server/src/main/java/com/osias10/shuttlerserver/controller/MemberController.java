@@ -13,24 +13,22 @@ import lombok.AllArgsConstructor;
 @Controller
 @AllArgsConstructor
 public class MemberController {
+    private MemberService memberService;
 
-
-	
-	private MemberService memberService;
-
-    // ¸ŞÀÎ ÆäÀÌÁö
+    // ë©”ì¸ í˜ì´ì§€
     @GetMapping("/")
     public String index() {
+    	System.out.println("go to index");
         return "/index";
     }
 
-    // È¸¿ø°¡ÀÔ ÆäÀÌÁö
+    // íšŒì›ê°€ì… í˜ì´ì§€
     @GetMapping("/user/signup")
     public String dispSignup() {
         return "/signup";
     }
 
-    // È¸¿ø°¡ÀÔ Ã³¸®
+    // íšŒì›ê°€ì… ì²˜ë¦¬
     @PostMapping("/user/signup")
     public String execSignup(MemberDto memberDto) {
         memberService.joinUser(memberDto);
@@ -38,39 +36,41 @@ public class MemberController {
         return "redirect:/user/login";
     }
 
-    // ·Î±×ÀÎ ÆäÀÌÁö
+    // ë¡œê·¸ì¸ í˜ì´ì§€
     @GetMapping("/user/login")
     public String dispLogin() {
         return "/login";
     }
 
-    // ·Î±×ÀÎ °á°ú ÆäÀÌÁö
+    // ë¡œê·¸ì¸ ê²°ê³¼ í˜ì´ì§€
     @GetMapping("/user/login/result")
     public String dispLoginResult() {
         return "/loginSuccess";
     }
 
-    // ·Î±×¾Æ¿ô °á°ú ÆäÀÌÁö
+    // ë¡œê·¸ì•„ì›ƒ ê²°ê³¼ í˜ì´ì§€
     @GetMapping("/user/logout/result")
     public String dispLogout() {
         return "/logout";
     }
 
-    // Á¢±Ù °ÅºÎ ÆäÀÌÁö
+    // ì ‘ê·¼ ê±°ë¶€ í˜ì´ì§€
     @GetMapping("/user/denied")
     public String dispDenied() {
         return "/denied";
     }
 
-    // ³» Á¤º¸ ÆäÀÌÁö
+    // ë‚´ ì •ë³´ í˜ì´ì§€
     @GetMapping("/user/info")
     public String dispMyInfo() {
         return "/myinfo";
     }
 
-    // ¾îµå¹Î ÆäÀÌÁö
+    // ì–´ë“œë¯¼ í˜ì´ì§€
     @GetMapping("/admin")
     public String dispAdmin() {
         return "/admin";
     }
+    
+    
 }

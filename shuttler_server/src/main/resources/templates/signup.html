@@ -1,4 +1,4 @@
-<!--È¸¿ø°¡ÀÔ ÆäÀÌÁö-->
+<!--íšŒì›ê°€ì… í˜ì´ì§€-->
 <!--signup.html-->
 <!DOCTYPE html>
 <!-- Latest compiled and minified CSS -->
@@ -8,22 +8,22 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<form method="post" action="/signUp">
+<form th:action="@{/user/signup}" method="post">
     <div class="container">
-        <h1>È¸¿ø°¡ÀÔ</h1>
+        <h1>íšŒì›ê°€ì…</h1>
         <div class="form-group">
             <label for="inputEmail4">userId</label>
-            <input type="text" class="form-control" id="inputEmail4" name="userId" placeholder="»ç¿ëÀÚ ¾ÆÀÌµğ">
+            <input type="text" class="form-control" id="inputEmail4" name="userId" placeholder="ì‚¬ìš©ì ì•„ì´ë””">
         </div>
         <div class="form-group">
             <label for="inputAddress">userName</label>
-            <input type="text" class="form-control" id="inputAddress" name="userName" placeholder="»ç¿ëÀÚ ÀÌ¸§">
+            <input type="text" class="form-control" id="inputAddress" name="userName" placeholder="ì‚¬ìš©ì ì´ë¦„">
         </div>
         <div class="form-group">
             <label for="inputPassword4">password</label>
-            <input type="password" class="form-control" id="inputPassword4" name="userPw" placeholder="»ç¿ëÀÚ ºñ¹Ğ¹øÈ£">
+            <input type="password" class="form-control" id="inputPassword4" name="userPw" placeholder="ì‚¬ìš©ì ë¹„ë°€ë²ˆí˜¸">
         </div>
-        <button type="submit" class="btn btn-primary">°¡ÀÔ ¿Ï·á</button>
+        <button type="submit" class="btn btn-primary">ê°€ì… ì™„ë£Œ</button>
     </div>
 </form>
 </body>

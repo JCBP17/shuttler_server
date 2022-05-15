@@ -20,45 +20,44 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @AllArgsConstructor
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	private MemberService memberService;
-	
-	@Bean
+    private MemberService memberService;
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-	@Override
+    @Override
     public void configure(WebSecurity web) throws Exception
     {
-        // static µğ·ºÅÍ¸®ÀÇ ÇÏÀ§ ÆÄÀÏ ¸ñ·ÏÀº ÀÎÁõ ¹«½Ã ( = Ç×»óÅë°ú )
+        // static ë””ë ‰í„°ë¦¬ì˜ í•˜ìœ„ íŒŒì¼ ëª©ë¡ì€ ì¸ì¦ ë¬´ì‹œ ( = í•­ìƒí†µê³¼ )
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
     }
-	 
-	@Override
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                // ÆäÀÌÁö ±ÇÇÑ ¼³Á¤
+                // í˜ì´ì§€ ê¶Œí•œ ì„¤ì •
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/myinfo").hasRole("MEMBER")
                 .antMatchers("/**").permitAll()
-            .and() // ·Î±×ÀÎ ¼³Á¤
+            .and() // ë¡œê·¸ì¸ ì„¤ì •
                 .formLogin()
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/user/login/result")
                 .permitAll()
-            .and() // ·Î±×¾Æ¿ô ¼³Á¤
+            .and() // ë¡œê·¸ì•„ì›ƒ ì„¤ì •
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                 .logoutSuccessUrl("/user/logout/result")
                 .invalidateHttpSession(true)
             .and()
-                // 403 ¿¹¿ÜÃ³¸® ÇÚµé¸µ
-            .exceptionHandling().accessDeniedPage("/user/denied");
+                // 403 ì˜ˆì™¸ì²˜ë¦¬ í•¸ë“¤ë§
+                .exceptionHandling().accessDeniedPage("/user/denied");
     }
-	
-	@Override
+
+    @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
     }
-
 }
