@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MemberDto {
 
-	private Long id;
+	private String uuid;
+	private String name;
+	private String id;
     private String email;
     private String password;
     private LocalDateTime createdDate;
@@ -19,16 +21,18 @@ public class MemberDto {
 
     public MemberEntity toEntity(){
         return MemberEntity.builder()
+        		.uuid(uuid)
+        		.name(name)
                 .id(id)
-                .email(email)
                 .password(password)
                 .build();
     }
 
     @Builder
-    public MemberDto(Long id, String email, String password) {
+    public MemberDto(String uuid,String name, String id, String password) {
+    	this.uuid=uuid;
+    	this.name=name;
         this.id = id;
-        this.email = email;
         this.password = password;
     }
 }

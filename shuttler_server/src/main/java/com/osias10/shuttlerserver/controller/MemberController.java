@@ -1,11 +1,13 @@
 package com.osias10.shuttlerserver.controller;
 
+import com.google.gson.JsonObject;
 import com.osias10.shuttlerserver.dto.MemberDto;
 import com.osias10.shuttlerserver.service.MemberService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
 
@@ -43,9 +45,14 @@ public class MemberController {
     }
 
     // 로그인 결과 페이지
+    @ResponseBody
     @GetMapping("/user/login/result")
     public String dispLoginResult() {
-        return "/loginSuccess";
+    	JsonObject obj =new JsonObject();
+    	obj.addProperty("http status code", 200);
+    	obj.addProperty("message", "Success");
+    	return obj.toString();
+        //return "/loginSuccess";
     }
 
     // 로그아웃 결과 페이지

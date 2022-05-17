@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 
 @Service
 @AllArgsConstructor
@@ -27,27 +29,30 @@ public class MemberService implements UserDetailsService {
     private MemberRepository memberRepository;
 
     @Transactional
-    public Long joinUser(MemberDto memberDto) {
+    public String joinUser(MemberDto memberDto) {
         // 비밀번호 암호화
-               BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+    	//memberDto.setPassword(memberDto.getPassword());
+        String uuid = UUID.randomUUID().toString();
+        memberDto.setUuid(uuid);
 
         return memberRepository.save(memberDto.toEntity()).getId();
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        Optional<MemberEntity> userEntityWrapper = memberRepository.findByEmail(userEmail);
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        Optional<MemberEntity> userEntityWrapper = memberRepository.findByid(id);
         MemberEntity userEntity = userEntityWrapper.get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if (("admin@example.com").equals(userEmail)) {
+        if (("admin@example.com").equals(id)) {
             authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
         } else {
             authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
         }
 
-        return new User(userEntity.getEmail(), userEntity.getPassword(), authorities);
+        return new User(userEntity.getId(), userEntity.getPassword(), authorities);
     }
 }
