@@ -79,5 +79,13 @@ public class MemberController {
         return "/admin";
     }
     
+    @PostMapping("/api/login")
+    public String apiLogin(MemberDto memberDto) {
+        memberService.joinUser(memberDto);
+
+        return "redirect:/user/login";
+    }
+    
+    
     
 }
