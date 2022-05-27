@@ -1,17 +1,22 @@
 package com.osias10.shuttlerserver.config;
 
+import com.osias10.shuttlerserver.Security.JwtFilter;
 import com.osias10.shuttlerserver.service.MemberService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
@@ -21,6 +26,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private MemberService memberService;
+    private JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,7 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
     }
-
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -58,7 +69,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
             .and()
                 // 403 예외처리 핸들링
-                .exceptionHandling().accessDeniedPage("/user/denied");
+                .exceptionHandling().accessDeniedPage("/user/denied")
+        	.and()
+        		.sessionManagement()                
+        		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

@@ -1,12 +1,18 @@
 package com.osias10.shuttlerserver.controller;
 
 import com.google.gson.JsonObject;
+import com.osias10.shuttlerserver.domain.entity.AuthRequest;
 import com.osias10.shuttlerserver.dto.MemberDto;
 import com.osias10.shuttlerserver.service.MemberService;
+import com.osias10.shuttlerserver.util.JwtUtil;
 
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +22,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MemberController {
     private MemberService memberService;
-
+    
+    private JwtUtil jwtUtil;
+    private AuthenticationManager authenticationManager;
+    
     // 메인 페이지
     @GetMapping("/")
     public String index() {
@@ -78,14 +87,42 @@ public class MemberController {
     public String dispAdmin() {
         return "/admin";
     }
-    
+    /*
     @PostMapping("/api/login")
     public String apiLogin(MemberDto memberDto) {
         memberService.joinUser(memberDto);
 
         return "redirect:/user/login";
     }
-    
-    
+    */
+    @GetMapping("/api/login")
+    public String dispLoginResult2() {
+    	JsonObject obj =new JsonObject();
+    	obj.addProperty("http status code", 200);
+    	obj.addProperty("message", "Success");
+    	return obj.toString();
+        //return "/loginSuccess";
+    }
+    @ResponseBody
+    @PostMapping("/api/login")
+    public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+    	System.out.println("testid:"+authRequest);
+        try {
+            authenticationManager.authenticate(
+            		
+                    new UsernamePasswordAuthenticationToken(authRequest.getId(), authRequest.getPassword())
+            );
+        } catch (Exception ex) {
+            throw new Exception("inavalid username/password");
+        }
+        String token = jwtUtil.generateToken(authRequest.getId());
+        //turn token;
+        JsonObject obj =new JsonObject();
+    	obj.addProperty("http status code", 200);
+    	obj.addProperty("message", "Success");
+    	obj.addProperty("token",token);
+    	return obj.toString();
+
+    }
     
 }

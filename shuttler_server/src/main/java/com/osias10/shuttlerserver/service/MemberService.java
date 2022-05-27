@@ -1,13 +1,11 @@
 package com.osias10.shuttlerserver.service;
 
-import com.osias10.shuttlerserver.domain.Role;
 import com.osias10.shuttlerserver.domain.entity.MemberEntity;
 import com.osias10.shuttlerserver.domain.repository.MemberRepository;
 import com.osias10.shuttlerserver.dto.MemberDto;
 import lombok.AllArgsConstructor;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,7 +37,7 @@ public class MemberService implements UserDetailsService {
 
         return memberRepository.save(memberDto.toEntity()).getId();
     }
-
+/*
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
         Optional<MemberEntity> userEntityWrapper = memberRepository.findByid(id);
@@ -55,4 +53,22 @@ public class MemberService implements UserDetailsService {
 
         return new User(userEntity.getId(), userEntity.getPassword(), authorities);
     }
+    */
+    
+    @Override
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+
+    	Optional<MemberEntity> userEntityWrapper = memberRepository.findByid(id);
+    	MemberEntity userEntity = userEntityWrapper.get();
+    	
+    	List<GrantedAuthority> authorities = new ArrayList<>();
+    	
+        if(userEntity==null) throw new UsernameNotFoundException(String.format("ID : [%s]를 찾을 수 없습니다", id));
+        else {
+        	return new User(userEntity.getId(), userEntity.getPassword(), authorities);
+        	
+        }
+        
+    }
+    
 }
