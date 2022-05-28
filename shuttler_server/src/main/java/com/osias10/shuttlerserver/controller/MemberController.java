@@ -125,4 +125,13 @@ public class MemberController {
 
     }
     
+    @GetMapping("/test/api")
+    public String apiTest() {
+    	JsonObject obj =new JsonObject();
+    	obj.addProperty("http status code", 200);
+    	obj.addProperty("message", "test");
+    	return obj.toString();
+        //return "apitest";
+    }
+    
 }
