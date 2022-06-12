@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.AllArgsConstructor;
@@ -124,9 +126,21 @@ public class MemberController {
     	return obj.toString();
 
     }
-    
-    @GetMapping("/test/api")
+    @ResponseBody
+    @PostMapping("/test/api")
+    //@RequestMapping(value = "/test/api", method = RequestMethod.POST)
     public String apiTest() {
+    	JsonObject obj =new JsonObject();
+    	obj.addProperty("http status code", 200);
+    	obj.addProperty("message", "test");
+    	return obj.toString();
+        //return "apitest";
+    }
+    
+    @ResponseBody
+    @GetMapping("/test/apiget")
+    //@RequestMapping(value = "/test/api", method = RequestMethod.POST)
+    public String apiTest2() {
     	JsonObject obj =new JsonObject();
     	obj.addProperty("http status code", 200);
     	obj.addProperty("message", "test");
